@@ -11,7 +11,22 @@ class ProductoContoller extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $productos = Producto::all();
+            //lo vamos a convertir en un arreglo
+            $response = $productos->toArray();
+            $i=0;
+            foreach($productos as $producto){
+                $response[$i]["clasificacion"]= $producto->clasificacion->array();
+                $response[$i]["categoria"]= $producto->categoria->toArray();
+                $response[$i]["marca"]= $producto->marca->toArray();
+                $response[$i]["imagenes"] = $producto->imagenes->toArray();
+                $i++;
+            }
+            return response()->json($response);
+        }catch(\Exception $e){
+            return $e->getMessage();
+        }
     }
 
     /**
